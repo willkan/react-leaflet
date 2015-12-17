@@ -1,6 +1,6 @@
 {
   "name": "react-leaflet-pane",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "React components for Leaflet maps",
   "main": "lib/index.js",
   "scripts": {
