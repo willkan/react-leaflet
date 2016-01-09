@@ -8,6 +8,17 @@ import pick from 'lodash/object/pick';
 const STYLES = [
   'zIndex',
   'opacity',
+  'width',
+  'left',
+  'right',
+  'top',
+  'bottom',
+  'height',
+  'overflow',
+  'marginLeft',
+  'marginRight',
+  'marginTop',
+  'marginBottom'
 ]
 
 export default class Pane extends Component {
@@ -20,6 +31,7 @@ export default class Pane extends Component {
     opacity: PropTypes.number,
     paneId: PropTypes.string,
     zIndex: PropTypes.number,
+    className: PropTypes.string,
   };
 
   constructor(props) {
@@ -30,15 +42,28 @@ export default class Pane extends Component {
   componentWillMount() {
     const {map} = this.props;
     this.leafletElement = map.getPane(this.paneId) || map.createPane(this.paneId);
+    this.originClassName = this.leafletElement.className;
+    this.setClassName(this.props.className);
     this.setPaneStyle(this.getPaneStyle(this.props));
   }
 
   componentDidUpdate(prevProps) {
     this.setPaneStyleIfChanged(prevProps, this.props);
+    this.setClassNameIfChanged(prevProps.className, this.props.className);
   }
 
   componentWillUnMount() {
     L.DomUtil.remove(this.leafletElement);
+  }
+
+  setClassName(className = '') {
+    this.leafletElement.className = this.originClassName + ' ' + className;
+  }
+
+  setClassNameIfChanged(from, to) {
+    if (from !== to) {
+      this.setClassName(to);
+    }
   }
 
   getPaneStyle(props) {
