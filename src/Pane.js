@@ -18,7 +18,8 @@ const STYLES = [
   'marginLeft',
   'marginRight',
   'marginTop',
-  'marginBottom'
+  'marginBottom',
+  'webkitFilter',
 ]
 
 export default class Pane extends Component {

@@ -5514,7 +5514,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodashObjectPick2 = _interopRequireDefault(_lodashObjectPick);
 
-	var STYLES = ['zIndex', 'opacity', 'width', 'left', 'right', 'top', 'bottom', 'height', 'overflow', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom'];
+	var STYLES = ['zIndex', 'opacity', 'width', 'left', 'right', 'top', 'bottom', 'height', 'overflow', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom', 'webkitFilter'];
 
 	var Pane = (function (_Component) {
 	  _inherits(Pane, _Component);
