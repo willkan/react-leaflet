@@ -1,5 +1,5 @@
 import { PropTypes } from 'react';
-import { imageOverlay, Map } from 'leaflet';
+import { imageOverlay, Map , latLngBounds} from 'leaflet';
 
 import boundsType from './types/bounds';
 import MapLayer from './MapLayer';
@@ -20,6 +20,9 @@ export default class ImageOverlay extends MapLayer {
   }
 
   componentDidUpdate(prevProps) {
+    if (this.props.bounds !== prevProps.bounds) {
+      this.leafletElement.setBounds(latLngBounds(this.props.bounds))
+    }
     if (this.props.url !== prevProps.url) {
       this.leafletElement.setUrl(this.props.url);
     }
