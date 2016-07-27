@@ -4215,6 +4215,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate(prevProps) {
+	      if (this.props.bounds !== prevProps.bounds) {
+	        this.leafletElement.setBounds((0, _leaflet.latLngBounds)(this.props.bounds));
+	      }
 	      if (this.props.url !== prevProps.url) {
 	        this.leafletElement.setUrl(this.props.url);
 	      }
