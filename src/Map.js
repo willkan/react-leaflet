@@ -1,13 +1,11 @@
 /* eslint-disable react/no-did-mount-set-state */
 
-import isArray from 'lodash/lang/isArray';
-import isUndefined from 'lodash/lang/isUndefined';
-import uniqueId from 'lodash/utility/uniqueId';
-
+import { isArray, isUndefined, omit, uniqueId } from 'lodash';
 import React, { PropTypes } from 'react';
 import Leaflet from 'leaflet';
 
 import boundsType from './types/bounds';
+import childrenType from './types/children';
 import latlngType from './types/latlng';
 
 import MapComponent from './MapComponent';
@@ -16,13 +14,11 @@ const normalizeCenter = pos => isArray(pos) ? pos : [pos.lat, pos.lng || pos.lon
 
 export default class Map extends MapComponent {
   static propTypes = {
+    animate: PropTypes.bool,
     bounds: boundsType,
     boundsOptions: PropTypes.object,
     center: latlngType,
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node,
-    ]),
+    children: childrenType,
     className: PropTypes.string,
     id: PropTypes.string,
     maxBounds: boundsType,
@@ -30,6 +26,10 @@ export default class Map extends MapComponent {
     minZoom: PropTypes.number,
     style: PropTypes.object,
     zoom: PropTypes.number,
+  };
+
+  static defaultProps = {
+    animate: false,
   };
 
   constructor(props) {
@@ -40,18 +40,19 @@ export default class Map extends MapComponent {
   }
 
   componentDidMount() {
-    this.leafletElement = Leaflet.map(this.state.id, this.props);
+    const props = omit(this.props, ['children', 'className', 'id', 'style']);
+    this.leafletElement = Leaflet.map(this.state.id, props);
     super.componentDidMount();
     this.setState({map: this.leafletElement});
-    if (!isUndefined(this.props.bounds)) {
-      this.leafletElement.fitBounds(this.props.bounds, this.props.boundsOptions);
+    if (!isUndefined(props.bounds)) {
+      this.leafletElement.fitBounds(props.bounds, props.boundsOptions);
     }
   }
 
   componentDidUpdate(prevProps) {
-    const { bounds, center, maxBounds, zoom } = this.props;
+    const { bounds, boundsOptions, center, maxBounds, zoom, animate } = this.props;
     if (center && this.shouldUpdateCenter(center, prevProps.center)) {
-      this.leafletElement.setView(center, zoom, {animate: false});
+      this.leafletElement.setView(center, zoom, {animate});
     }
     else if (zoom && zoom !== prevProps.zoom) {
       this.leafletElement.setZoom(zoom);
@@ -59,8 +60,11 @@ export default class Map extends MapComponent {
     if (maxBounds && this.shouldUpdateBounds(maxBounds, prevProps.maxBounds)) {
       this.leafletElement.setMaxBounds(maxBounds);
     }
-    if (bounds && this.shouldUpdateBounds(bounds, prevProps.bounds)) {
-      this.leafletElement.fitBounds(bounds, this.props.boundsOptions);
+    if (bounds && (
+      this.shouldUpdateBounds(bounds, prevProps.bounds)
+      || boundsOptions !== prevProps.boundsOptions
+    )) {
+      this.leafletElement.fitBounds(bounds, boundsOptions);
     }
   }
 
@@ -86,7 +90,7 @@ export default class Map extends MapComponent {
   render() {
     const map = this.leafletElement;
     const children = map ? React.Children.map(this.props.children, child => {
-      return child ? React.cloneElement(child, {map}) : null;
+      return child ? React.cloneElement(child, {map, layerContainer: map}) : null;
     }) : null;
 
     return (

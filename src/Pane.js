@@ -1,9 +1,6 @@
 import React, {Component, PropTypes} from 'react'
-import { Map } from 'leaflet';
-import assign from 'lodash/object/assign';
-import uniqueId from 'lodash/utility/uniqueId';
-import isEqual from 'lodash/lang/isEqual';
-import pick from 'lodash/object/pick';
+import { Map, DomUtil } from 'leaflet';
+import { assign, uniqueId, isEqual, pick } from 'lodash';
 
 const STYLES = [
   'zIndex',
@@ -28,11 +25,11 @@ export default class Pane extends Component {
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
     ]),
+    className: PropTypes.string,
     map: PropTypes.instanceOf(Map),
     opacity: PropTypes.number,
     paneId: PropTypes.string,
     zIndex: PropTypes.number,
-    className: PropTypes.string,
   };
 
   constructor(props) {
@@ -54,7 +51,7 @@ export default class Pane extends Component {
   }
 
   componentWillUnMount() {
-    L.DomUtil.remove(this.leafletElement);
+    DomUtil.remove(this.leafletElement);
   }
 
   setClassName(className = '') {
