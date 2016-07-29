@@ -1,10 +1,9 @@
-import clone from 'lodash/lang/clone';
-import forEach from 'lodash/collection/forEach';
-import reduce from 'lodash/collection/reduce';
-import keys from 'lodash/object/keys';
+import { clone, forEach, keys, reduce } from 'lodash';
 import { Component, PropTypes } from 'react';
+import warning from 'warning';
 
-const EVENTS_RE = /on(?:Leaflet)?(.+)/i;
+const EVENTS_RE_LEGACY = /^onLeaflet(.+)$/i;
+const EVENTS_RE = /^on(.+)$/i;
 
 export default class MapComponent extends Component {
   static propTypes = {
@@ -40,10 +39,14 @@ export default class MapComponent extends Component {
   }
 
   extractLeafletEvents(props) {
-    return reduce(keys(props), (res, ev) => {
-      if (EVENTS_RE.test(ev)) {
-        const key = ev.replace(EVENTS_RE, (match, p) => p.toLowerCase());
-        res[ key ] = props[ ev ];
+    return reduce(keys(props), (res, prop) => {
+      const maybeEvent = prop.replace(EVENTS_RE_LEGACY, (match, p) => {
+        warning(false, `"onLeaflet${ p }" and other "onLeaflet..." properties are deprecated and support will be removed in the next version, use "on${ p }" instead.`);
+        return `on${ p }`;
+      });
+      if (EVENTS_RE.test(maybeEvent)) {
+        const key = maybeEvent.replace(EVENTS_RE, (match, p) => p.toLowerCase());
+        res[ key ] = props[ prop ];
       }
       return res;
     }, {});
@@ -51,7 +54,7 @@ export default class MapComponent extends Component {
 
   bindLeafletEvents(next = {}, prev = {}) {
     const el = this.leafletElement;
-    if (!el) return;
+    if (!el || !el.on) return;
 
     const diff = clone(prev);
     forEach(prev, (cb, ev) => {

@@ -10,13 +10,14 @@ export default class TileLayer extends BaseTileLayer {
 
   componentWillMount() {
     super.componentWillMount();
-    const { map, url, ...props } = this.props;
+    const { map: _map, layerContainer: _lc, url, ...props } = this.props;
     this.leafletElement = tileLayer(url, props);
   }
 
   componentDidUpdate(prevProps) {
+    super.componentDidUpdate(prevProps);
     const { url } = this.props;
-    if (url && url !== prevProps.url) {
+    if (url !== prevProps.url) {
       this.leafletElement.setUrl(url);
     }
   }

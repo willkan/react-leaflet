@@ -1,5 +1,4 @@
-import isEqual from 'lodash/lang/isEqual';
-import pick from 'lodash/object/pick';
+import { isEqual, pick } from 'lodash';
 
 import MapLayer from './MapLayer';
 
