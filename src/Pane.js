@@ -26,6 +26,7 @@ export default class Pane extends Component {
       PropTypes.node,
     ]),
     className: PropTypes.string,
+    layerContainer: PropTypes.any,
     map: PropTypes.instanceOf(Map),
     opacity: PropTypes.number,
     paneId: PropTypes.string,
@@ -83,8 +84,8 @@ export default class Pane extends Component {
   }
 
   getClonedChildrenWithMap(extra) {
-    const { children, map } = this.props;
-    const props = assign({map}, extra);
+    const { children, map, layerContainer } = this.props;
+    const props = assign({map, layerContainer}, extra);
 
     return React.Children.map(children, child => {
       return child ? React.cloneElement(child, props) : null;

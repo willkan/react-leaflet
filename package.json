@@ -1,6 +1,6 @@
 {
   "name": "react-leaflet-pane",
-  "version": "0.11.8",
+  "version": "0.11.10",
   "description": "React components for Leaflet maps",
   "main": "lib/index.js",
   "scripts": {
@@ -36,10 +36,9 @@
   },
   "homepage": "https://github.com/PaulLeCam/react-leaflet",
   "dependencies": {
-    "leaflet": "^1.0.0-rc.2",
-    "lodash": "^4.0.0"
   },
   "peerDependencies": {
+    "lodash": "^4.0.0",
     "leaflet": "^0.7.0 || ^1.0.0-rc.2",
     "react": "^0.14.0 || ^15.0.0",
     "react-dom": "^0.14.0 || ^15.0.0"
@@ -61,6 +60,8 @@
     "jest-cli": "^12.1.1",
     "lodash-webpack-plugin": "^0.9.1",
     "onchange": "^2.5.0",
+    "lodash": "^4.0.0",
+    "leaflet": "^1.0.0-rc.2",
     "react": "^15.1.0",
     "react-addons-test-utils": "^15.1.0",
     "react-dom": "^15.1.0",

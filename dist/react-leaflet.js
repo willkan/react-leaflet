@@ -5892,8 +5892,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _props = this.props;
 	      var children = _props.children;
 	      var map = _props.map;
+	      var layerContainer = _props.layerContainer;
 
-	      var props = (0, _assign3.default)({ map: map }, extra);
+	      var props = (0, _assign3.default)({ map: map, layerContainer: layerContainer }, extra);
 
 	      return _react2.default.Children.map(children, function (child) {
 	        return child ? _react2.default.cloneElement(child, props) : null;
@@ -5924,6 +5925,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Pane.propTypes = {
 	  children: _react.PropTypes.oneOfType([_react.PropTypes.arrayOf(_react.PropTypes.node), _react.PropTypes.node]),
 	  className: _react.PropTypes.string,
+	  layerContainer: _react.PropTypes.any,
 	  map: _react.PropTypes.instanceOf(_leaflet.Map),
 	  opacity: _react.PropTypes.number,
 	  paneId: _react.PropTypes.string,
